@@ -7,60 +7,145 @@ library(dismo)
 
 #########################################################
 
-pH <- raster('Anthrax_GARP/pH_H20_250m.tif') %>%
-  projectRaster(veg_raster) %>% crop(zebra.ext) %>%
-  resample(veg_raster)
-writeRaster(pH, "Anthrax_GARP/pH_H20_30m.tif")
+road_dens <- raster('ENP_Predictors/Road_Density.tif')
 
-OC <- raster('Anthrax_GARP/OrganicContent_250m.tif') %>%
-  projectRaster(veg_raster) %>% crop(zebra.ext) %>%
-  resample(veg_raster)
-writeRaster(OC, "Anthrax_GARP/OrganicContent_30m.tif")
+zebra09 <- read_csv("Zebra_Anthrax_2009_Cleaned.csv") %>%
+  dplyr::select(x,y,date,ID) %>%
+  dplyr::filter(!is.na(x)) %>%
+  mutate(row =  seq(1,nrow(.),1), dists = 0, weights = 1) %>%
+  st_as_sf(., coords = 1:2, crs = "+init=epsg:32733")
 
-CEC <- raster('Anthrax_GARP/CationExchangeCapacity_250m.tif') %>%
-  projectRaster(veg_raster) %>% crop(zebra.ext) %>%
-  resample(veg_raster)
-writeRaster(CEC, "Anthrax_GARP/CationExchangeCapacity_30m.tif")
+zebra10 <- read_csv("Zebra_Anthrax_2010_Cleaned.csv") %>%
+  dplyr::select(x,y,date,ID) %>%
+  dplyr::filter(!is.na(x)) %>%
+  mutate(row =  seq(1,nrow(.),1), dists = 0, weights = 1) %>%
+  st_as_sf(., coords = 1:2, crs = "+init=epsg:32733")
+
+all_zebra <- rbind(zebra09, zebra10)
+
+zebra.ext <- extent(c(extent(zebra10)@xmin - 5000,
+                      extent(zebra10)@xmax + 5000,
+                      extent(zebra09)@ymin - 5000,
+                      extent(zebra10)@ymax + 5000))
+
+km_rast <- raster(extent(road_dens), res=c(1000,1000), crs=road_dens)
 
 bio1 <- raster('Anthrax_GARP/wc2.0_bio_30s_01.tif') %>%
-  projectRaster(veg_raster) %>% crop(zebra.ext) %>%
-  resample(veg_raster)
-writeRaster(bio1, "Anthrax_GARP/bio1_30m.tif")
+  projectRaster(km_rast) %>% crop(zebra.ext) %>%
+  resample(km_rast)
+writeRaster(bio1, "Anthrax_GARP/bio1_1km.tif")
 
 bio7 <- raster('Anthrax_GARP/wc2.0_bio_30s_07.tif') %>%
-  projectRaster(veg_raster) %>% crop(zebra.ext) %>%
-  resample(veg_raster)
-writeRaster(bio7, "Anthrax_GARP/bio7_30m.tif")
+  projectRaster(km_rast) %>% crop(zebra.ext) %>%
+  resample(km_rast)
+writeRaster(bio7, "Anthrax_GARP/bio7_1km.tif")
 
 bio12 <- raster('Anthrax_GARP/wc2.0_bio_30s_12.tif') %>%
-  projectRaster(veg_raster) %>% crop(zebra.ext) %>%
-  resample(veg_raster)
-writeRaster(bio12, "Anthrax_GARP/bio12_30m.tif")
+  projectRaster(km_rast) %>% crop(zebra.ext) %>%
+  resample(km_rast)
+writeRaster(bio12, "Anthrax_GARP/bio12_1km.tif")
 
 bio13 <- raster('Anthrax_GARP/wc2.0_bio_30s_13.tif') %>%
-  projectRaster(veg_raster) %>% crop(zebra.ext) %>%
-  resample(veg_raster)
-writeRaster(bio13, "Anthrax_GARP/bio13_30m.tif")
+  projectRaster(km_rast) %>% crop(zebra.ext) %>%
+  resample(km_rast)
+writeRaster(bio13, "Anthrax_GARP/bio13_1km.tif")
+
+pH <- raster('Anthrax_GARP/pH_H20_250m.tif') %>%
+  projectRaster(km_rast) %>% crop(zebra.ext) %>%
+  resample(km_rast)
+writeRaster(pH, "Anthrax_GARP/pH_H20_1km.tif")
+
+OC <- raster('Anthrax_GARP/OrganicContent_250m.tif') %>%
+  projectRaster(km_rast) %>% crop(zebra.ext) %>%
+  resample(km_rast)
+writeRaster(OC, "Anthrax_GARP/OrganicContent_1km.tif")
+
+CEC <- raster('Anthrax_GARP/CationExchangeCapacity_250m.tif') %>%
+  projectRaster(km_rast) %>% crop(zebra.ext) %>%
+  resample(km_rast)
+writeRaster(CEC, "Anthrax_GARP/CationExchangeCapacity_1km.tif")
+
+Green_2009 <- raster('ENP_Predictors/Mean_Greenness_2009.tif') %>%
+  projectRaster(km_rast) %>% crop(zebra.ext) %>%
+  resample(km_rast)
+writeRaster(Green_2009, "Anthrax_GARP/Greenness_2009_1km.tif")
+
+Green_2010 <- raster('ENP_Predictors/Mean_Greenness_2010.tif') %>%
+  projectRaster(km_rast) %>% crop(zebra.ext) %>%
+  resample(km_rast)
+writeRaster(Green_2010, "Anthrax_GARP/Greenness_2010_1km.tif")
+
+Wet_2009 <- raster('ENP_Predictors/Mean_Wetness_2009.tif') %>%
+  projectRaster(km_rast) %>% crop(zebra.ext) %>%
+  resample(km_rast)
+writeRaster(Wet_2009, "Anthrax_GARP/Wetness_2009_1km.tif")
+
+Wet_2010 <- raster('ENP_Predictors/Mean_Wetness_2010.tif') %>%
+  projectRaster(km_rast) %>% crop(zebra.ext) %>%
+  resample(km_rast)
+writeRaster(Wet_2010, "Anthrax_GARP/Wetness_2010_1km.tif")
+
+Mean_NDVI_2009 <- raster('ENP_Predictors/Mean_NDVI_2009.tif') %>%
+  projectRaster(km_rast) %>% crop(zebra.ext) %>%
+  resample(km_rast)
+writeRaster(Mean_NDVI_2009, "Anthrax_GARP/Mean_NDVI_2009_1km.tif")
+
+Max_NDVI_2009 <- raster('ENP_Predictors/Max_NDVI_2009.tif') %>%
+  projectRaster(km_rast) %>% crop(zebra.ext) %>%
+  resample(km_rast)
+writeRaster(Max_NDVI_2009, "Anthrax_GARP/Max_NDVI_2009_1km.tif")
+
+Min_NDVI_2009 <- raster('ENP_Predictors/Min_NDVI_2009.tif') %>%
+  projectRaster(km_rast) %>% crop(zebra.ext) %>%
+  resample(km_rast)
+writeRaster(Min_NDVI_2009, "Anthrax_GARP/Min_NDVI_2009_1km.tif")
+
+Range_NDVI_2009 <- raster('ENP_Predictors/Range_NDVI_2009.tif') %>%
+  projectRaster(km_rast) %>% crop(zebra.ext) %>%
+  resample(km_rast)
+writeRaster(Range_NDVI_2009, "Anthrax_GARP/Range_NDVI_2009_1km.tif")
+
+Mean_NDVI_2010 <- raster('ENP_Predictors/Mean_NDVI_2010.tif') %>%
+  projectRaster(km_rast) %>% crop(zebra.ext) %>%
+  resample(km_rast)
+writeRaster(Mean_NDVI_2010, "Anthrax_GARP/Mean_NDVI_2010_1km.tif")
+
+Max_NDVI_2010 <- raster('ENP_Predictors/Max_NDVI_2010.tif') %>%
+  projectRaster(km_rast) %>% crop(zebra.ext) %>%
+  resample(km_rast)
+writeRaster(Max_NDVI_2010, "Anthrax_GARP/Max_NDVI_2010_1km.tif")
+
+Min_NDVI_2010 <- raster('ENP_Predictors/Min_NDVI_2010.tif') %>%
+  projectRaster(km_rast) %>% crop(zebra.ext) %>%
+  resample(km_rast)
+writeRaster(Min_NDVI_2010, "Anthrax_GARP/Min_NDVI_2010_1km.tif")
+
+Range_NDVI_2010 <- raster('ENP_Predictors/Range_NDVI_2010.tif') %>%
+  projectRaster(km_rast) %>% crop(zebra.ext) %>%
+  resample(km_rast)
+writeRaster(Range_NDVI_2010, "Anthrax_GARP/Range_NDVI_2010_1km.tif")
 
 #########################################################
 
-pH <- raster('Anthrax_GARP/pH_H20_30m.tif')
-OC <- raster('Anthrax_GARP/OrganicContent_30m.tif')
-CEC <- raster('Anthrax_GARP/CationExchangeCapacity_30m.tif')
-bio1 <- raster("Anthrax_GARP/bio1_30m.tif")
-bio7 <- raster("Anthrax_GARP/bio7_30m.tif")
-bio12 <- raster("Anthrax_GARP/bio12_30m.tif")
-bio13 <- raster("Anthrax_GARP/bio13_30m.tif")
-mean_NDVI_2009 <- raster('Anthrax_GARP/Mean_NDVI_2009.tif')
-max_NDVI_2009 <- raster('Anthrax_GARP/Max_NDVI_2009.tif')
-min_NDVI_2009 <- raster('Anthrax_GARP/Min_NDVI_2009.tif')
-range_NDVI_2009 <- raster('Anthrax_GARP/Range_NDVI_2009.tif')
-wet_2009 <- raster('Anthrax_GARP/Mean_Wetness_2009.tif')
-mean_NDVI_2010 <- raster('Anthrax_GARP/Mean_NDVI_2010.tif')
-max_NDVI_2010 <- raster('Anthrax_GARP/Max_NDVI_2010.tif')
-min_NDVI_2010 <- raster('Anthrax_GARP/Min_NDVI_2010.tif')
-range_NDVI_2010 <- raster('Anthrax_GARP/Range_NDVI_2010.tif')
-wet_2010 <- raster('Anthrax_GARP/Mean_Wetness_2010.tif')
+pH <- raster('Anthrax_GARP/pH_H20_1km.tif')
+OC <- raster('Anthrax_GARP/OrganicContent_1km.tif')
+CEC <- raster('Anthrax_GARP/CationExchangeCapacity_1km.tif')
+bio1 <- raster("Anthrax_GARP/bio1_1km.tif")
+bio7 <- raster("Anthrax_GARP/bio7_1km.tif")
+bio12 <- raster("Anthrax_GARP/bio12_1km.tif")
+bio13 <- raster("Anthrax_GARP/bio13_1km.tif")
+mean_NDVI_2009 <- raster('Anthrax_GARP/Mean_NDVI_2009_1km.tif')
+max_NDVI_2009 <- raster('Anthrax_GARP/Max_NDVI_2009_1km.tif')
+min_NDVI_2009 <- raster('Anthrax_GARP/Min_NDVI_2009_1km.tif')
+range_NDVI_2009 <- raster('Anthrax_GARP/Range_NDVI_2009_1km.tif')
+wet_2009 <- raster('Anthrax_GARP/Wetness_2009_1km.tif')
+green_2009 <- raster('Anthrax_GARP/Greenness_2009_1km.tif')
+mean_NDVI_2010 <- raster('Anthrax_GARP/Mean_NDVI_2010_1km.tif')
+max_NDVI_2010 <- raster('Anthrax_GARP/Max_NDVI_2010_1km.tif')
+min_NDVI_2010 <- raster('Anthrax_GARP/Min_NDVI_2010_1km.tif')
+range_NDVI_2010 <- raster('Anthrax_GARP/Range_NDVI_2010_1km.tif')
+wet_2010 <- raster('Anthrax_GARP/Wetness_2010_1km.tif')
+green_2010 <- raster('Anthrax_GARP/Greenness_2010_1km.tif')
 
 carcass <- st_read('/Users/ericdougherty/Dropbox/EricDanaRSF/GIS/Etosha/AllAnthraxCarcasses09-10.shp')
 #carcass <- st_read('/Anthrax_GARP/AllAnthraxCarcasses09-10.shp') %>%
@@ -76,12 +161,14 @@ expl_var_2009 <- stack (pH, OC, CEC, bio1, bio7, bio12,
                         max_NDVI_2009, min_NDVI_2009,
                         range_NDVI_2009, wet_2009)
 cov_2009 <- layerStats(expl_var_2009, 'pearson', na.rm=TRUE)
+write.csv(cov_2009[[1]], "Anthrax_GARP/Covariance_Matrix_2009.csv")
 
 expl_var_2010 <- stack (pH, OC, CEC, bio1, bio7, bio12,
                         bio13, mean_NDVI_2010, 
                         max_NDVI_2010, min_NDVI_2010,
                         range_NDVI_2010, wet_2010)
 cov_2010 <- layerStats(expl_var_2010, 'pearson', na.rm=TRUE)
+write.csv(cov_2010[[1]], "Anthrax_GARP/Covariance_Matrix_2010.csv")
 
 random <- data.frame(randomPoints(expl_var_2009, 2*(nrow(carc.2009.sp))))
 random$resp.var <- 0
@@ -130,9 +217,11 @@ myBiomodEM <- BIOMOD_EnsembleModeling( modeling.output = myBiomodModelOut,
                                        prob.mean.weight.decay = 'proportional' )
 get_evaluations(myBiomodEM)
 var_import <- get_variables_importance(myBiomodModelOut)
+var_import <- data.frame(var_import[,,1,1])
+write.csv(var_import, "Variable_Importance_2009.csv")
 
-# bio 13 is eliminated (covariance with bio12) - 0.1618 vs. 0.0852
-# NDVI measures are eliminated (covariance with ) - 0.5907 vs. < 0.1533
+# bio 13 is eliminated (covariance with bio12) - 0.187 vs. 0.132
+# NDVI measures are eliminated (covariance with Wetness) - 0.416 vs. < 0.152
 expl_var_2009_new <- stack(pH, OC, CEC, bio1, 
                            bio7, bio12, wet_2009)
 
@@ -142,8 +231,7 @@ myBiomodData <- BIOMOD_FormatingData(resp.var = bound_2009$resp.var,
                                      resp.xy = bound_2009[,c('x','y')],
                                      resp.name = "B.anthracis_2009")
 myBiomodModelOut <- BIOMOD_Modeling( myBiomodData,models = c('GLM', 'GBM', 'GAM', 'CTA', 
-                                                             'ANN', 'SRE', 'FDA', 'MARS',
-                                                             'RF', 'MAXENT.Phillips'), 
+                                                             'ANN', 'SRE', 'FDA', 'MARS', 'RF'), 
                                      NbRunEval=5, 
                                      DataSplit = 80, 
                                      VarImport=5)
@@ -232,8 +320,7 @@ biomod_2010 <- BIOMOD_FormatingData(resp.var = bound_2010$resp.var,
 setwd('/Users/ericdougherty/Box Sync/Dissertation/Behavioral_SSF/Anthrax_GARP/')
 myBiomodModelOut <- BIOMOD_Modeling(data = biomod_2010,
                                     models=c('GLM', 'GBM', 'GAM', 'CTA', 
-                                             'ANN', 'SRE', 'FDA', 'MARS',
-                                             'RF', 'MAXENT.Phillips'),
+                                             'ANN', 'SRE', 'FDA', 'MARS', 'RF'),
                                     NbRunEval=1,
                                     VarImport=1)
 myBiomodModelEval <- get_evaluations(myBiomodModelOut)
@@ -253,6 +340,8 @@ myBiomodEM <- BIOMOD_EnsembleModeling( modeling.output = myBiomodModelOut,
                                        prob.mean.weight.decay = 'proportional' )
 get_evaluations(myBiomodEM)
 var_import <- get_variables_importance(myBiomodModelOut)
+var_import <- data.frame(var_import[,,1,1])
+write.csv(var_import, "Variable_Importance_2010.csv")
 
 # bio 13 is eliminated (covariance with bio12) - 0.352 vs. 0.237
 # mean NDVI is eliminated (covariance with Wet) - 0.355 vs. < 0.038
@@ -267,8 +356,7 @@ myBiomodData <- BIOMOD_FormatingData(resp.var = bound_2010$resp.var,
                                      resp.xy = bound_2010[,c('x','y')],
                                      resp.name = "B.anthracis_2010")
 myBiomodModelOut <- BIOMOD_Modeling( myBiomodData,models = c('GLM', 'GBM', 'GAM', 'CTA', 
-                                                             'ANN', 'SRE', 'FDA', 'MARS',
-                                                             'RF', 'MAXENT.Phillips'), 
+                                                             'ANN', 'SRE', 'FDA', 'MARS', 'RF'), 
                                      NbRunEval=5, 
                                      DataSplit = 80, 
                                      VarImport=5)
