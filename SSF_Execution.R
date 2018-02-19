@@ -230,7 +230,7 @@ for (i in 1:length(name_list)) {
   all <- raster(Wet_09)
   all[] <- 0
   forage <- raster(Wet_09)
-  #\forage[] <- 0
+  forage[] <- 0
   
   if (i < 6) {
     pred <- predict(object=get(paste0("out",i))[[4]], newdata=pred_09_df, type='risk')
@@ -257,88 +257,149 @@ for (i in 1:length(name_list)) {
 }
 
 #####################################################################
-######################### GLM Predictions ###########################
+##################### All Zebra Predictions #########################
 
-pred1_GLM <- raster::predict(object=norm_stack_09_GLM, model=out1[[4]], fun=predict, type='response')
-pred2_GLM <- raster::predict(object=norm_stack_09_GLM, model=out2[[4]], fun=predict, type='response')
-pred3_GLM <- raster::predict(object=norm_stack_09_GLM, model=out3[[4]], fun=predict, type='response')
-pred4_GLM <- raster::predict(object=norm_stack_09_GLM, model=out4[[4]], fun=predict, type='response')
-pred5_GLM <- raster::predict(object=norm_stack_09_GLM, model=out5[[4]], fun=predict, type='response')
-pred6_GLM <- raster::predict(object=norm_stack_10_GLM, model=out6[[4]], fun=predict, type='response')
-pred7_GLM <- raster::predict(object=norm_stack_10_GLM, model=out7[[4]], fun=predict, type='response')
-pred8_GLM <- raster::predict(object=norm_stack_10_GLM, model=out8[[4]], fun=predict, type='response')
-pred9_GLM <- raster::predict(object=norm_stack_10_GLM, model=out9[[4]], fun=predict, type='response')
-pred10_GLM <- raster::predict(object=norm_stack_10_GLM, model=out10[[4]], fun=predict, type='response')
-pred11_GLM <- raster::predict(object=norm_stack_10_GLM, model=out11[[4]], fun=predict, type='response')
+read_all_final <- function(file_name) {
+  output <- read_csv(paste0(file_name,"_All_Final.csv")) %>%
+    dplyr::select("Green", "Wet", "Road_Dens",
+                  "Green_Norm", "Wet_Norm", "Road_Dens_Norm", 
+                  "ID", "binom", "fix")
+  return(output)
+}
 
-forage1_GLM <- raster::predict(object=norm_stack_09_GLM, model=forage1[[4]], fun=predict, type='response')
-forage2_GLM <- raster::predict(object=norm_stack_09_GLM, model=forage2[[4]], fun=predict, type='response')
-forage3_GLM <- raster::predict(object=norm_stack_09_GLM, model=forage3[[4]], fun=predict, type='response')
-forage4_GLM <- raster::predict(object=norm_stack_09_GLM, model=forage4[[4]], fun=predict, type='response')
-forage5_GLM <- raster::predict(object=norm_stack_09_GLM, model=forage5[[4]], fun=predict, type='response')
-forage6_GLM <- raster::predict(object=norm_stack_10_GLM, model=forage6[[4]], fun=predict, type='response')
-forage7_GLM <- raster::predict(object=norm_stack_10_GLM, model=forage7[[4]], fun=predict, type='response')
-forage8_GLM <- raster::predict(object=norm_stack_10_GLM, model=forage8[[4]], fun=predict, type='response')
-forage9_GLM <- raster::predict(object=norm_stack_10_GLM, model=forage9[[4]], fun=predict, type='response')
-forage10_GLM <- raster::predict(object=norm_stack_10_GLM, model=forage10[[4]], fun=predict, type='response')
-forage11_GLM <- raster::predict(object=norm_stack_10_GLM, model=forage11[[4]], fun=predict, type='response')
+read_forage_final <- function(file_name) {
+  output <- read_csv(paste0(file_name,"_Foraging_Final.csv")) %>%
+    dplyr::select("Green", "Wet", "Road_Dens",
+                  "Green_Norm", "Wet_Norm", "Road_Dens_Norm", 
+                  "ID", "binom", "fix")
+  return(output)
+}
 
+setwd("~/Box Sync/Dissertation/Behavioral_SSF/Rerun_Extraction_Results")
+all_2009 <- read_all_final(name_list[1])
+for (i in 2:5) {
+  temp <- read_all_final(name_list[i])
+  all_2009 <- rbind(all_2009, temp)
+}
+all_2010 <- read_all_final(name_list[6])
+for (i in 7:11) {
+  temp <- read_all_final(name_list[i])
+  all_2010 <- rbind(all_2010, temp)
+}
 
-###### Plot GLM Response (All and Foraging) with Points ########
+forage_2009 <- read_forage_final(name_list[1])
+for (i in 2:5) {
+  temp <- read_forage_final(name_list[i])
+  forage_2009 <- rbind(forage_2009, temp)
+}
+forage_2010 <- read_forage_final(name_list[6])
+for (i in 7:11) {
+  temp <- read_forage_final(name_list[i])
+  forage_2010 <- rbind(forage_2010, temp)
+}
 
-plot(pred1_GLM)
+All_2009_clogit <- clogit(binom ~ Wet_Norm + Green_Norm + Road_Dens_Norm + 
+                             strata(fix) + strata(ID), data=all_2009)
+All_2010_clogit <- clogit(binom ~ Wet_Norm + Green_Norm + Road_Dens_Norm + 
+                            strata(fix) + strata(ID), data=all_2010)
+Foraging_2009_clogit <- clogit(binom ~ Wet_Norm + Green_Norm + Road_Dens_Norm + 
+                                  strata(fix) + strata(ID), data=forage_2009)
+Foraging_2010_clogit <- clogit(binom ~ Wet_Norm + Green_Norm + Road_Dens_Norm + 
+                                 strata(fix) + strata(ID), data=forage_2010)
+
+pred <- raster(Wet_09)
+pred[] <- 0
+
+pred_09_df <- as.data.frame(norm_stack_09_GLM)
+pred_09_df$fix <- 1
+pred_09_df$ID <- "AG068_2009"
+
+pred_10_df <- as.data.frame(norm_stack_10_GLM)
+pred_10_df$fix <- 1
+pred_10_df$ID <- "AG068_2010"
+
+all_2009_pred <- predict(object=All_2009_clogit, newdata=pred_09_df, type='risk')
+all_2010_pred <- predict(object=All_2010_clogit, newdata=pred_10_df, type='risk')
+forage_2009_pred <- predict(object=Foraging_2009_clogit, newdata=pred_09_df, type='risk')
+forage_2010_pred <- predict(object=Foraging_2010_clogit, newdata=pred_10_df, type='risk')
+
+pred@data@values <- all_2009_pred
+pred <- pred/(1 + pred)
+assign("All_2009_Risk", pred)
+
+pred@data@values <- all_2010_pred
+pred <- pred/(1 + pred)
+assign("All_2010_Risk", pred)
+
+pred@data@values <- forage_2009_pred
+pred <- pred/(1 + pred)
+assign("Forage_2009_Risk", pred)
+
+pred@data@values <- forage_2010_pred
+pred <- pred/(1 + pred)
+assign("Forage_2010_Risk", pred)
+
+setwd("~/Box Sync/Dissertation/Behavioral_SSF/Rerun_Results")
+writeRaster(All_2009_Risk, "Zebra_2009_All_Risk.tif", format='GTiff')
+writeRaster(All_2010_Risk, "Zebra_2010_All_Risk.tif", format='GTiff')
+writeRaster(Forage_2009_Risk, "Zebra_2009_Forage_Risk.tif", format='GTiff')
+writeRaster(Forage_2010_Risk, "Zebra_2010_Forage_Risk.tif", format='GTiff')
+
+###### Plot clogit Response (All and Foraging) with Points ########
+
+plot(AG059_2009_All_Risk)
 zebra09 %>% filter(ID == "AG059_2009") %>% as('Spatial') %>% points(cex=0.3, pch=19)
-plot(forage1_GLM)
+plot(AG059_2009_Forage_Risk)
 zebra09 %>% filter(ID == "AG059_2009") %>% as('Spatial') %>% points(cex=0.3, pch=19)
 
-plot(pred2_GLM)
+plot(AG061_2009_All_Risk)
 zebra09 %>% filter(ID == "AG061_2009") %>% as('Spatial') %>% points(cex=0.3, pch=19)
-plot(forage2_GLM)
+plot(AG061_2009_Forage_Risk)
 zebra09 %>% filter(ID == "AG061_2009") %>% as('Spatial') %>% points(cex=0.3, pch=19)
 
-plot(pred3_GLM)
+plot(AG062_2009_All_Risk)
 zebra09 %>% filter(ID == "AG062_2009") %>% as('Spatial') %>% points(cex=0.3, pch=19)
-plot(forage3_GLM)
+plot(AG062_2009_Forage_Risk)
 zebra09 %>% filter(ID == "AG062_2009") %>% as('Spatial') %>% points(cex=0.3, pch=19)
 
-plot(pred4_GLM)
+plot(AG063_2009_All_Risk)
 zebra09 %>% filter(ID == "AG063_2009") %>% as('Spatial') %>% points(cex=0.3, pch=19)
-plot(forage4_GLM)
+plot(AG063_2009_Forage_Risk)
 zebra09 %>% filter(ID == "AG063_2009") %>% as('Spatial') %>% points(cex=0.3, pch=19)
 
-plot(pred5_GLM)
+plot(AG068_2009_All_Risk)
 zebra09 %>% filter(ID == "AG068_2009") %>% as('Spatial') %>% points(cex=0.3, pch=19)
-plot(forage5_GLM)
+plot(AG068_2009_Forage_Risk)
 zebra09 %>% filter(ID == "AG068_2009") %>% as('Spatial') %>% points(cex=0.3, pch=19)
 
-plot(pred6_GLM)
+plot(AG063_2010_All_Risk)
 zebra10 %>% filter(ID == "AG063_2010") %>% as('Spatial') %>% points(cex=0.3, pch=19)
-plot(forage6_GLM)
+plot(AG063_2010_Forage_Risk)
 zebra10 %>% filter(ID == "AG063_2010") %>% as('Spatial') %>% points(cex=0.3, pch=19)
 
-plot(pred7_GLM)
+plot(AG068_2010_All_Risk)
 zebra10 %>% filter(ID == "AG068_2010") %>% as('Spatial') %>% points(cex=0.3, pch=19)
-plot(forage7_GLM)
+plot(AG068_2010_Forage_Risk)
 zebra10 %>% filter(ID == "AG068_2010") %>% as('Spatial') %>% points(cex=0.3, pch=19)
 
-plot(pred8_GLM)
+plot(AG252_2010_All_Risk)
 zebra10 %>% filter(ID == "AG252_2010") %>% as('Spatial') %>% points(cex=0.3, pch=19)
-plot(forage8_GLM)
+plot(AG252_2010_Forage_Risk)
 zebra10 %>% filter(ID == "AG252_2010") %>% as('Spatial') %>% points(cex=0.3, pch=19)
 
-plot(pred9_GLM)
+plot(AG253_2010_All_Risk)
 zebra10 %>% filter(ID == "AG253_2010") %>% as('Spatial') %>% points(cex=0.3, pch=19)
-plot(forage9_GLM)
+plot(AG253_2010_Forage_Risk)
 zebra10 %>% filter(ID == "AG253_2010") %>% as('Spatial') %>% points(cex=0.3, pch=19)
 
-plot(pred10_GLM)
+plot(AG255_2010_All_Risk)
 zebra10 %>% filter(ID == "AG255_2010") %>% as('Spatial') %>% points(cex=0.3, pch=19)
-plot(forage11_GLM)
+plot(AG255_2010_Forage_Risk)
 zebra10 %>% filter(ID == "AG255_2010") %>% as('Spatial') %>% points(cex=0.3, pch=19)
 
-plot(pred11_GLM)
+plot(AG256_2010_All_Risk)
 zebra10 %>% filter(ID == "AG256_2010") %>% as('Spatial') %>% points(cex=0.3, pch=19)
-plot(forage11_GLM)
+plot(AG256_2010_Forage_Risk)
 zebra10 %>% filter(ID == "AG256_2010") %>% as('Spatial') %>% points(cex=0.3, pch=19)
 
 ##########################################################
