@@ -40,16 +40,16 @@ Green_09 <- raster('ENP_Predictors/Mean_Greenness_2009.tif')
 Green_10 <- raster('ENP_Predictors/Mean_Greenness_2010.tif')
 Wet_09 <- raster('ENP_Predictors/Mean_Wetness_2009.tif')
 Wet_10 <- raster('ENP_Predictors/Mean_Wetness_2010.tif')
-veg <- raster('ENP_Predictors/Vegetation_Crop.tif')
-bare <- raster('ENP_Predictors/Prop_Bare.tif')
-steppe <- raster('ENP_Predictors/Prop_Steppe.tif')
-grass <- raster('ENP_Predictors/Prop_Grass.tif')
-shrub<- raster('ENP_Predictors/Prop_Shrub.tif')
-low <- raster('ENP_Predictors/Prop_Low.tif')
-high <- raster('ENP_Predictors/Prop_High.tif')
+# veg <- raster('ENP_Predictors/Vegetation_Crop.tif')
+# bare <- raster('ENP_Predictors/Prop_Bare.tif')
+# steppe <- raster('ENP_Predictors/Prop_Steppe.tif')
+# grass <- raster('ENP_Predictors/Prop_Grass.tif')
+# shrub<- raster('ENP_Predictors/Prop_Shrub.tif')
+# low <- raster('ENP_Predictors/Prop_Low.tif')
+# high <- raster('ENP_Predictors/Prop_High.tif')
 
-pred_stack_09 <- stack(NDVI_09, Green_09, Wet_09, road_dens, bare, steppe, grass, shrub, low, high)
-pred_stack_10 <- stack(NDVI_10, Green_10, Wet_10, road_dens, bare, steppe, grass, shrub, low, high)
+pred_stack_09 <- stack(NDVI_09, Green_09, Wet_09, road_dens)#, bare, steppe, grass, shrub, low, high)
+pred_stack_10 <- stack(NDVI_10, Green_10, Wet_10, road_dens)#, bare, steppe, grass, shrub, low, high)
 
 means09 <- cellStats(pred_stack_09, stat='mean', na.rm=TRUE)
 sd09 <- cellStats(pred_stack_09, stat='sd', na.rm=TRUE)
@@ -58,41 +58,30 @@ sd10 <- cellStats(pred_stack_10, stat='sd', na.rm=TRUE)
 
 norm_stack_09 <- stack((Green_09 - means09[2]) / sd09[2],
                        (Wet_09 - means09[3]) / sd09[3],
-                       (road_dens - means09[4])/ sd09[4],
-                       bare, steppe, grass, shrub, low, high)
+                       (road_dens - means09[4])/ sd09[4])
+#                       bare, steppe, grass, shrub, low, high)
 
 norm_stack_10 <- stack((Green_10 - means10[2]) / sd10[2],
                        (Wet_10 - means10[3]) / sd10[3],
-                       (road_dens - means10[4])/ sd10[4],
-                       bare, steppe, grass, shrub, low, high)
+                       (road_dens - means10[4])/ sd10[4])
+#                       bare, steppe, grass, shrub, low, high)
 
 
 ############################################################
 
 setwd("~/Box Sync/Dissertation/Behavioral_SSF/Original_Final")
 
-
 cond.logit.all <- function(i) {
   if (i < 6) {
     all_final <- read_csv(paste0(name_list[i],"_All_Final.csv")) %>%
-      mutate(Green_Norm = (Green - means09['Mean_Greenness_2009']) / sd09['Mean_Greenness_2009'],
-             Wet_Norm = (Wet - means09['Mean_Wetness_2009']) / sd09['Mean_Wetness_2009'],
-             Road_Dens_Norm = (Road_Dens - means09['Road_Density']) / sd09['Road_Density']) %>%
-      dplyr::select("NDVI", "Green", "Wet", "Road_Dens",
-                    "prop_bare", "prop_steppe", "prop_grass", 
-                    "prop_shrub", "prop_low", "prop_high", 
+      dplyr::select("Green", "Wet", "Road_Dens",
                     "Green_Norm", "Wet_Norm", "Road_Dens_Norm", 
-                    "x", "y", "ID", "binom", "fix")
+                    "ID", "binom", "fix")
   } else {
     all_final <- read_csv(paste0(name_list[i],"_All_Final.csv")) %>%
-        mutate(Green_Norm = (Green - means10['Mean_Greenness_2010']) / sd10['Mean_Greenness_2010'],
-               Wet_Norm = (Wet - means10['Mean_Wetness_2010']) / sd10['Mean_Wetness_2010'],
-               Road_Dens_Norm = (Road_Dens - means10['Road_Density']) / sd10['Road_Density']) %>%
-        dplyr::select("NDVI", "Green", "Wet", "Road_Dens",
-                      "prop_bare", "prop_steppe", "prop_grass", 
-                      "prop_shrub", "prop_low", "prop_high",
+        dplyr::select("Green", "Wet", "Road_Dens",
                       "Green_Norm", "Wet_Norm", "Road_Dens_Norm", 
-                      "x", "y", "ID", "binom", "fix")
+                      "ID", "binom", "fix")
   }
   assign(paste0(name_list[i],"_All"), all_final)
   assign(paste0(name_list[i],"_Corr"), cor(all_final[,1:4]))
@@ -121,24 +110,14 @@ cond.logit.all <- function(i) {
 cond.logit.forage <- function(i) {
   if (i < 6) {
     forage_final <- read_csv(paste0(name_list[i],"_Foraging_Final.csv")) %>%
-      mutate(Green_Norm = (Green - means09['Mean_Greenness_2009']) / sd09['Mean_Greenness_2009'],
-             Wet_Norm = (Wet - means09['Mean_Wetness_2009']) / sd09['Mean_Wetness_2009'],
-             Road_Dens_Norm = (Road_Dens - means09['Road_Density']) / sd09['Road_Density']) %>%
-      dplyr::select("NDVI", "Green", "Wet", "Road_Dens",
-                    "prop_bare", "prop_steppe", "prop_grass", 
-                    "prop_shrub", "prop_low", "prop_high", 
+      dplyr::select("Green", "Wet", "Road_Dens",
                     "Green_Norm", "Wet_Norm", "Road_Dens_Norm", 
-                    "x", "y", "ID", "binom", "fix")
+                    "ID", "binom", "fix")
   } else {
     forage_final <- read_csv(paste0(name_list[i],"_Foraging_Final.csv")) %>%
-      mutate(Green_Norm = (Green - means10['Mean_Greenness_2010']) / sd10['Mean_Greenness_2010'],
-             Wet_Norm = (Wet - means10['Mean_Wetness_2010']) / sd10['Mean_Wetness_2010'],
-             Road_Dens_Norm = (Road_Dens - means10['Road_Density']) / sd10['Road_Density']) %>%
-      dplyr::select("NDVI", "Green", "Wet", "Road_Dens",
-                    "prop_bare", "prop_steppe", "prop_grass",
-                    "prop_shrub", "prop_low", "prop_high",
+      dplyr::select("Green", "Wet", "Road_Dens",
                     "Green_Norm", "Wet_Norm", "Road_Dens_Norm", 
-                    "x", "y", "ID", "binom", "fix")
+                    "ID", "binom", "fix")
   }
   all_pts <- rbind(used, avail)
   assign(paste0(name_list[i],"_All"), forage_final)
@@ -251,7 +230,7 @@ for (i in 1:length(name_list)) {
   all <- raster(Wet_09)
   all[] <- 0
   forage <- raster(Wet_09)
-  forage[] <- 0
+  #\forage[] <- 0
   
   if (i < 6) {
     pred <- predict(object=get(paste0("out",i))[[4]], newdata=pred_09_df, type='risk')
@@ -271,7 +250,7 @@ for (i in 1:length(name_list)) {
   print(i)
 }
 
-setwd("~/Box Sync/Dissertation/Behavioral_SSF/Results")
+setwd("~/Box Sync/Dissertation/Behavioral_SSF/Rerun_Results")
 for (i in 1:length(name_list)) {
   writeRaster(get(paste0(name_list[i],"_All_Risk")), paste0(name_list[i],"_All_Risk.tif"), format='GTiff')
   writeRaster(get(paste0(name_list[i],"_Forage_Risk")), paste0(name_list[i],"_Forage_Risk.tif"), format='GTiff')
