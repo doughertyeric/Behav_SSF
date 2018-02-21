@@ -345,6 +345,29 @@ writeRaster(All_2010_Risk, "Zebra_2010_All_Risk.tif", format='GTiff')
 writeRaster(Forage_2009_Risk, "Zebra_2009_Forage_Risk.tif", format='GTiff')
 writeRaster(Forage_2010_Risk, "Zebra_2010_Forage_Risk.tif", format='GTiff')
 
+setwd("~/Box Sync/Dissertation/Behavioral_SSF/Figures")
+pdf('Zebra_2009_All_Risk.pdf', height=6, width=8)
+plot(All_2009_Risk)
+dev.off()
+pdf('Zebra_2010_All_Risk.pdf', height=6, width=8)
+plot(All_2010_Risk)
+dev.off()
+pdf('Zebra_2009_Foraging_Risk.pdf', height=6, width=8)
+plot(Forage_2009_Risk)
+dev.off()
+pdf('Zebra_2010_Foraging_Risk.pdf', height=6, width=8)
+plot(Forage_2010_Risk)
+dev.off()
+
+library(RColorBrewer)
+library(colorspace)
+cuts= seq(0,1,0.05)
+
+plot(All_2009_Risk, breaks=cuts, col=rev(heat_hcl(21)))
+plot(Forage_2009_Risk, breaks=cuts, col=rev(heat_hcl(21)))
+plot(All_2010_Risk, breaks=cuts, col=rev(heat_hcl(21)))
+plot(Forage_2010_Risk, breaks=cuts, col=rev(heat_hcl(21)))
+
 ###### Plot clogit Response (All and Foraging) with Points ########
 
 plot(AG059_2009_All_Risk)
