@@ -21,7 +21,9 @@ for (i in 1:nrow(anth09_df)) {
   }
 }
 anth09_liberal <- setValues(anth09, anth09_df[,1])
+#pdf('Anthrax_2009_Liberal.pdf', height=6, width=8)
 plot(anth09_liberal)
+#dev.off()
 
 
 # Create a similar binomial plot with a moderate estimate of the area with anthrax present
@@ -36,7 +38,9 @@ for (i in 1:nrow(anth09_df)) {
   }
 }
 anth09_moderate <- setValues(anth09, anth09_df[,1])
+#pdf('Anthrax_2009_Moderate.pdf', height=6, width=8)
 plot(anth09_moderate)
+#dev.off()
 
 # Create a final binomial plot with the most conservative estimate
 anth09_df <- as.data.frame(anth09)
@@ -50,7 +54,9 @@ for (i in 1:nrow(anth09_df)) {
   }
 }
 anth09_conserve <- setValues(anth09, anth09_df[,1])
+#pdf('Anthrax_2009_Conservative.pdf', height=6, width=8)
 plot(anth09_conserve)
+#dev.off()
 
 #######
 
@@ -66,7 +72,9 @@ for (i in 1:nrow(anth10_df)) {
   }
 }
 anth10_liberal <- setValues(anth10, anth10_df[,1])
+#pdf('Anthrax_2010_Liberal.pdf', height=6, width=8)
 plot(anth10_liberal)
+#dev.off()
 
 # Create a similar binomial plot with a moderate estimate of the area with anthrax present
 anth10_df <- as.data.frame(anth10)
@@ -80,7 +88,9 @@ for (i in 1:nrow(anth10_df)) {
   }
 }
 anth10_moderate <- setValues(anth10, anth10_df[,1])
+#pdf('Anthrax_2010_Moderate.pdf', height=6, width=8)
 plot(anth10_moderate)
+#dev.off()
 
 # Create a final binomial plot with the most conservative estimate
 anth10_df <- as.data.frame(anth10)
@@ -94,7 +104,9 @@ for (i in 1:nrow(anth10_df)) {
   }
 }
 anth10_conserve <- setValues(anth10, anth10_df[,1])
+#pdf('Anthrax_2010_Conservative.pdf', height=6, width=8)
 plot(anth10_conserve)
+#dev.off()
 
 ###################################################
 
