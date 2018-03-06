@@ -126,13 +126,13 @@ anth09_mod_sf <- st_as_sf(anth09_mod_poly)
 anth09_cons_poly <- SpatialPolygons(list(rasterToPolygons(anth09_conserve, dissolve=TRUE)@polygons[[2]]))
 anth09_cons_sf <- st_as_sf(anth09_cons_poly)
 
-v_all09$extract(anth09_lib_sf, fun=sum) #689017.8
-v_all09$extract(anth09_mod_sf, fun=sum) #248667.4
-v_all09$extract(anth09_cons_sf, fun=sum) #154536.1
+v_all09$extract(anth09_lib_sf, fun=sum) #918501.3
+v_all09$extract(anth09_mod_sf, fun=sum) #436484.1
+v_all09$extract(anth09_cons_sf, fun=sum) #273227.8
 
-v_forage09$extract(anth09_lib_sf, fun=sum) #783595.3
-v_forage09$extract(anth09_mod_sf, fun=sum) #264261.1
-v_forage09$extract(anth09_cons_sf, fun=sum) #156968.1
+v_forage09$extract(anth09_lib_sf, fun=sum) #1050767
+v_forage09$extract(anth09_mod_sf, fun=sum) #458987.6
+v_forage09$extract(anth09_cons_sf, fun=sum) #278090
 
 anth10_lib_poly <- SpatialPolygons(list(rasterToPolygons(anth10_liberal, dissolve=TRUE)@polygons[[2]]))
 anth10_lib_sf <- st_as_sf(anth10_lib_poly)
@@ -141,32 +141,13 @@ anth10_mod_sf <- st_as_sf(anth10_mod_poly)
 anth10_cons_poly <- SpatialPolygons(list(rasterToPolygons(anth10_conserve, dissolve=TRUE)@polygons[[2]]))
 anth10_cons_sf <- st_as_sf(anth10_cons_poly)
 
-v_all10$extract(anth10_lib_sf, fun=sum) #591296.6
-v_all10$extract(anth10_mod_sf, fun=sum) #245518.3
-v_all10$extract(anth10_cons_sf, fun=sum) #153657.6
+v_all10$extract(anth10_lib_sf, fun=sum) #642090.7
+v_all10$extract(anth10_mod_sf, fun=sum) #286855.1
+v_all10$extract(anth10_cons_sf, fun=sum) #202190.3
 
-v_forage10$extract(anth10_lib_sf, fun=sum) #727306
-v_forage10$extract(anth10_mod_sf, fun=sum) #262596.6
-v_forage10$extract(anth10_cons_sf, fun=sum) #156903.1
-
-#####
-
-v_all09$extract(anth09_lib_sf, fun=mean) #0.357
-v_all09$extract(anth09_mod_sf, fun=mean) #0.418
-v_all09$extract(anth09_cons_sf, fun=mean) #0.465
-
-v_forage09$extract(anth09_lib_sf, fun=mean) #0.406
-v_forage09$extract(anth09_mod_sf, fun=mean) #0.445
-v_forage09$extract(anth09_cons_sf, fun=mean) #0.472
-
-v_all09$extract(anth09_lib_sf_out, fun=mean) #0.273
-v_all09$extract(anth09_mod_sf_out, fun=mean) #0.283
-v_all09$extract(anth09_cons_sf_out, fun=mean) #0.286
-
-v_forage09$extract(anth09_lib_sf_out, fun=mean) #0.345
-v_forage09$extract(anth09_mod_sf_out, fun=mean) #0.354
-v_forage09$extract(anth09_cons_sf_out, fun=mean) #0.356
-
+v_forage10$extract(anth10_lib_sf, fun=sum) #762175.8
+v_forage10$extract(anth10_mod_sf, fun=sum) #289575.4
+v_forage10$extract(anth10_cons_sf, fun=sum) #194998.5
 
 ##############################################################
 
@@ -177,21 +158,21 @@ anth09_mod_sf_out <- st_as_sf(anth09_mod_poly_out)
 anth09_cons_poly_out <- SpatialPolygons(list(rasterToPolygons(anth09_conserve, dissolve=TRUE)@polygons[[1]]))
 anth09_cons_sf_out <- st_as_sf(anth09_cons_poly_out)
 
-v_all09$extract(anth09_lib_sf_out, fun=sum) #1632125
-v_all09$extract(anth09_mod_sf_out, fun=sum) #2072475
-v_all09$extract(anth09_cons_sf_out, fun=sum) #2166607
+v_all09$extract(anth09_lib_sf_out, fun=sum) #1402641
+v_all09$extract(anth09_mod_sf_out, fun=sum) #1884659
+v_all09$extract(anth09_cons_sf_out, fun=sum) #2047915
 
-v_all09$extract(anth09_lib_sf, fun=sum)/v_all09$extract(anth09_lib_sf_out, fun=sum) #0.42216
-v_all09$extract(anth09_mod_sf, fun=sum)/v_all09$extract(anth09_mod_sf_out, fun=sum) #0.1199857
-v_all09$extract(anth09_cons_sf, fun=sum)/v_all09$extract(anth09_cons_sf_out, fun=sum) #0.07132631
+v_all09$extract(anth09_lib_sf, fun=sum)/v_all09$extract(anth09_lib_sf_out, fun=sum) #0.6548368
+v_all09$extract(anth09_mod_sf, fun=sum)/v_all09$extract(anth09_mod_sf_out, fun=sum) #0.2315985
+v_all09$extract(anth09_cons_sf, fun=sum)/v_all09$extract(anth09_cons_sf_out, fun=sum) #0.1334175
 
-v_forage09$extract(anth09_lib_sf_out, fun=sum) #2063128
-v_forage09$extract(anth09_mod_sf_out, fun=sum) #2582462
-v_forage09$extract(anth09_cons_sf_out, fun=sum) #2689755
+v_forage09$extract(anth09_lib_sf_out, fun=sum) #1795956
+v_forage09$extract(anth09_mod_sf_out, fun=sum) #2387735
+v_forage09$extract(anth09_cons_sf_out, fun=sum) #2568633
 
-v_forage09$extract(anth09_lib_sf, fun=sum)/v_forage09$extract(anth09_lib_sf_out, fun=sum) #0.3798094
-v_forage09$extract(anth09_mod_sf, fun=sum)/v_forage09$extract(anth09_mod_sf_out, fun=sum) #0.1023291
-v_forage09$extract(anth09_cons_sf, fun=sum)/v_forage09$extract(anth09_cons_sf_out, fun=sum) #0.05835779
+v_forage09$extract(anth09_lib_sf, fun=sum)/v_forage09$extract(anth09_lib_sf_out, fun=sum) #0.585074
+v_forage09$extract(anth09_mod_sf, fun=sum)/v_forage09$extract(anth09_mod_sf_out, fun=sum) #0.1922272
+v_forage09$extract(anth09_cons_sf, fun=sum)/v_forage09$extract(anth09_cons_sf_out, fun=sum) #0.1082638
 
 anth10_lib_poly_out <- SpatialPolygons(list(rasterToPolygons(anth10_liberal, dissolve=TRUE)@polygons[[1]]))
 anth10_lib_sf_out <- st_as_sf(anth10_lib_poly_out)
@@ -200,39 +181,21 @@ anth10_mod_sf_out <- st_as_sf(anth10_mod_poly_out)
 anth10_cons_poly_out <- SpatialPolygons(list(rasterToPolygons(anth10_conserve, dissolve=TRUE)@polygons[[1]]))
 anth10_cons_sf_out <- st_as_sf(anth10_cons_poly_out)
 
-v_all10$extract(anth10_lib_sf_out, fun=sum) #604706.1
-v_all10$extract(anth10_mod_sf_out, fun=sum) #950484.4
-v_all10$extract(anth10_cons_sf_out, fun=sum) #1042345
+v_all10$extract(anth10_lib_sf_out, fun=sum) #553912
+v_all10$extract(anth10_mod_sf_out, fun=sum) #909147.6
+v_all10$extract(anth10_cons_sf_out, fun=sum) #993812.4
 
-v_all10$extract(anth10_lib_sf, fun=sum)/v_all10$extract(anth10_lib_sf_out, fun=sum) #0.9778246
-v_all10$extract(anth10_mod_sf, fun=sum)/v_all10$extract(anth10_mod_sf_out, fun=sum) #0.2583086
-v_all10$extract(anth10_cons_sf, fun=sum)/v_all10$extract(anth10_cons_sf_out, fun=sum) #0.1474153
+v_all10$extract(anth10_lib_sf, fun=sum)/v_all10$extract(anth10_lib_sf_out, fun=sum) #1.159193
+v_all10$extract(anth10_mod_sf, fun=sum)/v_all10$extract(anth10_mod_sf_out, fun=sum) #0.315521
+v_all10$extract(anth10_cons_sf, fun=sum)/v_all10$extract(anth10_cons_sf_out, fun=sum) #0.2034491
 
-v_forage10$extract(anth10_lib_sf_out, fun=sum) #1292533
-v_forage10$extract(anth10_mod_sf_out, fun=sum) #1757242
-v_forage10$extract(anth10_cons_sf_out, fun=sum) #1862936
+v_forage10$extract(anth10_lib_sf_out, fun=sum) #1257663
+v_forage10$extract(anth10_mod_sf_out, fun=sum) #1730263
+v_forage10$extract(anth10_cons_sf_out, fun=sum) #1824840
 
-v_forage10$extract(anth10_lib_sf, fun=sum)/v_forage10$extract(anth10_lib_sf_out, fun=sum) #0.5626983
-v_forage10$extract(anth10_mod_sf, fun=sum)/v_forage10$extract(anth10_mod_sf_out, fun=sum) #0.1494368
-v_forage10$extract(anth10_cons_sf, fun=sum)/v_forage10$extract(anth10_cons_sf_out, fun=sum) #0.08422357
-
-#######
-
-v_all10$extract(anth10_lib_sf, fun=mean) #0.283
-v_all10$extract(anth10_mod_sf, fun=mean) #0.406
-v_all10$extract(anth10_cons_sf, fun=mean) #0.456
-
-v_forage10$extract(anth10_lib_sf, fun=mean) #0.348
-v_forage10$extract(anth10_mod_sf, fun=mean) #0.434
-v_forage10$extract(anth10_cons_sf, fun=mean) #0.466
-
-v_all10$extract(anth10_lib_sf_out, fun=mean) #0.104
-v_all10$extract(anth10_mod_sf_out, fun=mean) #0.130
-v_all10$extract(anth10_cons_sf_out, fun=mean) #0.138
-
-v_forage10$extract(anth10_lib_sf_out, fun=mean) #0.223
-v_forage10$extract(anth10_mod_sf_out, fun=mean) #0.241
-v_forage10$extract(anth10_cons_sf_out, fun=mean) #0.246
+v_forage10$extract(anth10_lib_sf, fun=sum)/v_forage10$extract(anth10_lib_sf_out, fun=sum) #0.6060254
+v_forage10$extract(anth10_mod_sf, fun=sum)/v_forage10$extract(anth10_mod_sf_out, fun=sum) #0.1673592
+v_forage10$extract(anth10_cons_sf, fun=sum)/v_forage10$extract(anth10_cons_sf_out, fun=sum) #0.1068579
 
 #######################################################################
 ###################### Overlap Analysis (3 km) ########################
@@ -366,13 +329,13 @@ anth09_mod_sf <- st_as_sf(anth09_mod_poly)
 anth09_cons_poly <- SpatialPolygons(list(rasterToPolygons(anth09_conserve, dissolve=TRUE)@polygons[[2]]))
 anth09_cons_sf <- st_as_sf(anth09_cons_poly)
 
-v_all09$extract(anth09_lib_sf, fun=sum) #689017.8
-v_all09$extract(anth09_mod_sf, fun=sum) #248667.4
-v_all09$extract(anth09_cons_sf, fun=sum) #154536.1
+v_all09$extract(anth09_lib_sf, fun=sum) #654251.5
+v_all09$extract(anth09_mod_sf, fun=sum) #257675.7
+v_all09$extract(anth09_cons_sf, fun=sum) #153164.8
 
-v_forage09$extract(anth09_lib_sf, fun=sum) #783595.3
-v_forage09$extract(anth09_mod_sf, fun=sum) #264261.1
-v_forage09$extract(anth09_cons_sf, fun=sum) #156968.1
+v_forage09$extract(anth09_lib_sf, fun=sum) #742450.5
+v_forage09$extract(anth09_mod_sf, fun=sum) #275962
+v_forage09$extract(anth09_cons_sf, fun=sum) #155764.7
 
 anth10_lib_poly <- SpatialPolygons(list(rasterToPolygons(anth10_liberal, dissolve=TRUE)@polygons[[2]]))
 anth10_lib_sf <- st_as_sf(anth10_lib_poly)
@@ -381,31 +344,13 @@ anth10_mod_sf <- st_as_sf(anth10_mod_poly)
 anth10_cons_poly <- SpatialPolygons(list(rasterToPolygons(anth10_conserve, dissolve=TRUE)@polygons[[2]]))
 anth10_cons_sf <- st_as_sf(anth10_cons_poly)
 
-v_all10$extract(anth10_lib_sf, fun=sum) #591296.6
-v_all10$extract(anth10_mod_sf, fun=sum) #245518.3
-v_all10$extract(anth10_cons_sf, fun=sum) #153657.6
+v_all10$extract(anth10_lib_sf, fun=sum) #597350
+v_all10$extract(anth10_mod_sf, fun=sum) #244124.2
+v_all10$extract(anth10_cons_sf, fun=sum) #135443.6
 
-v_forage10$extract(anth10_lib_sf, fun=sum) #727306
-v_forage10$extract(anth10_mod_sf, fun=sum) #262596.6
-v_forage10$extract(anth10_cons_sf, fun=sum) #156903.1
-
-#####
-
-v_all09$extract(anth09_lib_sf, fun=mean) #0.357
-v_all09$extract(anth09_mod_sf, fun=mean) #0.418
-v_all09$extract(anth09_cons_sf, fun=mean) #0.465
-
-v_forage09$extract(anth09_lib_sf, fun=mean) #0.406
-v_forage09$extract(anth09_mod_sf, fun=mean) #0.445
-v_forage09$extract(anth09_cons_sf, fun=mean) #0.472
-
-v_all09$extract(anth09_lib_sf_out, fun=mean) #0.273
-v_all09$extract(anth09_mod_sf_out, fun=mean) #0.283
-v_all09$extract(anth09_cons_sf_out, fun=mean) #0.286
-
-v_forage09$extract(anth09_lib_sf_out, fun=mean) #0.345
-v_forage09$extract(anth09_mod_sf_out, fun=mean) #0.354
-v_forage09$extract(anth09_cons_sf_out, fun=mean) #0.356
+v_forage10$extract(anth10_lib_sf, fun=sum) #734826.9
+v_forage10$extract(anth10_mod_sf, fun=sum) #264268.7
+v_forage10$extract(anth10_cons_sf, fun=sum) #143562.5
 
 
 ##############################################################
@@ -417,21 +362,21 @@ anth09_mod_sf_out <- st_as_sf(anth09_mod_poly_out)
 anth09_cons_poly_out <- SpatialPolygons(list(rasterToPolygons(anth09_conserve, dissolve=TRUE)@polygons[[1]]))
 anth09_cons_sf_out <- st_as_sf(anth09_cons_poly_out)
 
-v_all09$extract(anth09_lib_sf_out, fun=sum) #1632125
-v_all09$extract(anth09_mod_sf_out, fun=sum) #2072475
-v_all09$extract(anth09_cons_sf_out, fun=sum) #2166607
+v_all09$extract(anth09_lib_sf_out, fun=sum) #1676823
+v_all09$extract(anth09_mod_sf_out, fun=sum) #2073399
+v_all09$extract(anth09_cons_sf_out, fun=sum) #2177910
 
-v_all09$extract(anth09_lib_sf, fun=sum)/v_all09$extract(anth09_lib_sf_out, fun=sum) #0.42216
-v_all09$extract(anth09_mod_sf, fun=sum)/v_all09$extract(anth09_mod_sf_out, fun=sum) #0.1199857
-v_all09$extract(anth09_cons_sf, fun=sum)/v_all09$extract(anth09_cons_sf_out, fun=sum) #0.07132631
+v_all09$extract(anth09_lib_sf, fun=sum)/v_all09$extract(anth09_lib_sf_out, fun=sum) #0.3901733
+v_all09$extract(anth09_mod_sf, fun=sum)/v_all09$extract(anth09_mod_sf_out, fun=sum) #0.124277
+v_all09$extract(anth09_cons_sf, fun=sum)/v_all09$extract(anth09_cons_sf_out, fun=sum) #0.07032651
 
-v_forage09$extract(anth09_lib_sf_out, fun=sum) #2063128
-v_forage09$extract(anth09_mod_sf_out, fun=sum) #2582462
-v_forage09$extract(anth09_cons_sf_out, fun=sum) #2689755
+v_forage09$extract(anth09_lib_sf_out, fun=sum) #2117500
+v_forage09$extract(anth09_mod_sf_out, fun=sum) #2583988
+v_forage09$extract(anth09_cons_sf_out, fun=sum) #2704186
 
-v_forage09$extract(anth09_lib_sf, fun=sum)/v_forage09$extract(anth09_lib_sf_out, fun=sum) #0.3798094
-v_forage09$extract(anth09_mod_sf, fun=sum)/v_forage09$extract(anth09_mod_sf_out, fun=sum) #0.1023291
-v_forage09$extract(anth09_cons_sf, fun=sum)/v_forage09$extract(anth09_cons_sf_out, fun=sum) #0.05835779
+v_forage09$extract(anth09_lib_sf, fun=sum)/v_forage09$extract(anth09_lib_sf_out, fun=sum) #0.350626
+v_forage09$extract(anth09_mod_sf, fun=sum)/v_forage09$extract(anth09_mod_sf_out, fun=sum) #0.1067969
+v_forage09$extract(anth09_cons_sf, fun=sum)/v_forage09$extract(anth09_cons_sf_out, fun=sum) #0.05760132
 
 anth10_lib_poly_out <- SpatialPolygons(list(rasterToPolygons(anth10_liberal, dissolve=TRUE)@polygons[[1]]))
 anth10_lib_sf_out <- st_as_sf(anth10_lib_poly_out)
@@ -440,37 +385,19 @@ anth10_mod_sf_out <- st_as_sf(anth10_mod_poly_out)
 anth10_cons_poly_out <- SpatialPolygons(list(rasterToPolygons(anth10_conserve, dissolve=TRUE)@polygons[[1]]))
 anth10_cons_sf_out <- st_as_sf(anth10_cons_poly_out)
 
-v_all10$extract(anth10_lib_sf_out, fun=sum) #604706.1
-v_all10$extract(anth10_mod_sf_out, fun=sum) #950484.4
-v_all10$extract(anth10_cons_sf_out, fun=sum) #1042345
+v_all10$extract(anth10_lib_sf_out, fun=sum) #600670.9
+v_all10$extract(anth10_mod_sf_out, fun=sum) #953896.8
+v_all10$extract(anth10_cons_sf_out, fun=sum) #1062577
 
-v_all10$extract(anth10_lib_sf, fun=sum)/v_all10$extract(anth10_lib_sf_out, fun=sum) #0.9778246
-v_all10$extract(anth10_mod_sf, fun=sum)/v_all10$extract(anth10_mod_sf_out, fun=sum) #0.2583086
-v_all10$extract(anth10_cons_sf, fun=sum)/v_all10$extract(anth10_cons_sf_out, fun=sum) #0.1474153
+v_all10$extract(anth10_lib_sf, fun=sum)/v_all10$extract(anth10_lib_sf_out, fun=sum) #0.9944714
+v_all10$extract(anth10_mod_sf, fun=sum)/v_all10$extract(anth10_mod_sf_out, fun=sum) #0.2559231
+v_all10$extract(anth10_cons_sf, fun=sum)/v_all10$extract(anth10_cons_sf_out, fun=sum) #0.127467
 
-v_forage10$extract(anth10_lib_sf_out, fun=sum) #1292533
-v_forage10$extract(anth10_mod_sf_out, fun=sum) #1757242
-v_forage10$extract(anth10_cons_sf_out, fun=sum) #1862936
+v_forage10$extract(anth10_lib_sf_out, fun=sum) #1290121
+v_forage10$extract(anth10_mod_sf_out, fun=sum) #1760679
+v_forage10$extract(anth10_cons_sf_out, fun=sum) #1881385
 
-v_forage10$extract(anth10_lib_sf, fun=sum)/v_forage10$extract(anth10_lib_sf_out, fun=sum) #0.5626983
-v_forage10$extract(anth10_mod_sf, fun=sum)/v_forage10$extract(anth10_mod_sf_out, fun=sum) #0.1494368
-v_forage10$extract(anth10_cons_sf, fun=sum)/v_forage10$extract(anth10_cons_sf_out, fun=sum) #0.08422357
-
-#######
-
-v_all10$extract(anth10_lib_sf, fun=mean) #0.283
-v_all10$extract(anth10_mod_sf, fun=mean) #0.406
-v_all10$extract(anth10_cons_sf, fun=mean) #0.456
-
-v_forage10$extract(anth10_lib_sf, fun=mean) #0.348
-v_forage10$extract(anth10_mod_sf, fun=mean) #0.434
-v_forage10$extract(anth10_cons_sf, fun=mean) #0.466
-
-v_all10$extract(anth10_lib_sf_out, fun=mean) #0.104
-v_all10$extract(anth10_mod_sf_out, fun=mean) #0.130
-v_all10$extract(anth10_cons_sf_out, fun=mean) #0.138
-
-v_forage10$extract(anth10_lib_sf_out, fun=mean) #0.223
-v_forage10$extract(anth10_mod_sf_out, fun=mean) #0.241
-v_forage10$extract(anth10_cons_sf_out, fun=mean) #0.246
+v_forage10$extract(anth10_lib_sf, fun=sum)/v_forage10$extract(anth10_lib_sf_out, fun=sum) #0.5695798
+v_forage10$extract(anth10_mod_sf, fun=sum)/v_forage10$extract(anth10_mod_sf_out, fun=sum) #0.1500948
+v_forage10$extract(anth10_cons_sf, fun=sum)/v_forage10$extract(anth10_cons_sf_out, fun=sum) #0.07630683
 
