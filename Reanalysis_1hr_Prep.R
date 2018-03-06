@@ -685,4 +685,343 @@ dev.off()
 ##################### Overlap Analysis #########################
 ################################################################
 
+anth09 <- raster("/Users/ericdougherty/Box Sync/Dissertation/Behavioral_SSF/Anthrax_GARP/Rerun_1km_New/B.anthracis_2009_1km.tif")
+anth10 <- raster("/Users/ericdougherty/Box Sync/Dissertation/Behavioral_SSF/Anthrax_GARP/Rerun_1km_New/B.anthracis_2010_1km.tif")
+
+# Create a binomial plot of the probability of anthrax presence given a relatively liberal threshold
+anth09_df <- as.data.frame(anth09)
+for (i in 1:nrow(anth09_df)) {
+  if (!is.na(anth09_df[i,1])) {
+    if (anth09_df[i,1] < 100) {
+      anth09_df[i,1] <- 0 
+    } else {
+      anth09_df[i,1] <- 1
+    }
+  }
+}
+anth09_liberal <- setValues(anth09, anth09_df[,1])
+
+# Create a similar binomial plot with a moderate estimate of the area with anthrax present
+anth09_df <- as.data.frame(anth09)
+for (i in 1:nrow(anth09_df)) {
+  if (!is.na(anth09_df[i,1])) {
+    if (anth09_df[i,1] < 500) {
+      anth09_df[i,1] <- 0 
+    } else {
+      anth09_df[i,1] <- 1
+    }
+  }
+}
+anth09_moderate <- setValues(anth09, anth09_df[,1])
+
+# Create a final binomial plot with the most conservative estimate
+anth09_df <- as.data.frame(anth09)
+for (i in 1:nrow(anth09_df)) {
+  if (!is.na(anth09_df[i,1])) {
+    if (anth09_df[i,1] < 750) {
+      anth09_df[i,1] <- 0 
+    } else {
+      anth09_df[i,1] <- 1
+    }
+  }
+}
+anth09_conserve <- setValues(anth09, anth09_df[,1])
+
+#############################
+
+# Create a binomial plot of the probability of anthrax presence given a relatively liberal threshold
+anth10_df <- as.data.frame(anth10)
+for (i in 1:nrow(anth10_df)) {
+  if (!is.na(anth10_df[i,1])) {
+    if (anth10_df[i,1] < 100) {
+      anth10_df[i,1] <- 0 
+    } else {
+      anth10_df[i,1] <- 1
+    }
+  }
+}
+anth10_liberal <- setValues(anth10, anth10_df[,1])
+
+# Create a similar binomial plot with a moderate estimate of the area with anthrax present
+anth10_df <- as.data.frame(anth10)
+for (i in 1:nrow(anth10_df)) {
+  if (!is.na(anth10_df[i,1])) {
+    if (anth10_df[i,1] < 500) {
+      anth10_df[i,1] <- 0 
+    } else {
+      anth10_df[i,1] <- 1
+    }
+  }
+}
+anth10_moderate <- setValues(anth10, anth10_df[,1])
+
+# Create a final binomial plot with the most conservative estimate
+anth10_df <- as.data.frame(anth10)
+for (i in 1:nrow(anth10_df)) {
+  if (!is.na(anth10_df[i,1])) {
+    if (anth10_df[i,1] < 750) {
+      anth10_df[i,1] <- 0 
+    } else {
+      anth10_df[i,1] <- 1
+    }
+  }
+}
+anth10_conserve <- setValues(anth10, anth10_df[,1])
+
+##############################################################
+
+v_all09 <- velox(All_2009_Risk)
+v_all10 <- velox(All_2010_Risk)
+v_forage09 <- velox(Forage_2009_Risk)
+v_forage10 <- velox(Forage_2010_Risk)
+
+anth09_lib_poly <- SpatialPolygons(list(rasterToPolygons(anth09_liberal, dissolve=TRUE)@polygons[[2]]))
+anth09_lib_sf <- st_as_sf(anth09_lib_poly)
+anth09_mod_poly <- SpatialPolygons(list(rasterToPolygons(anth09_moderate, dissolve=TRUE)@polygons[[2]]))
+anth09_mod_sf <- st_as_sf(anth09_mod_poly)
+anth09_cons_poly <- SpatialPolygons(list(rasterToPolygons(anth09_conserve, dissolve=TRUE)@polygons[[2]]))
+anth09_cons_sf <- st_as_sf(anth09_cons_poly)
+
+v_all09$extract(anth09_lib_sf, fun=sum) #1107108
+v_all09$extract(anth09_mod_sf, fun=sum) #493597.6
+v_all09$extract(anth09_cons_sf, fun=sum) #298709.1
+
+v_forage09$extract(anth09_lib_sf, fun=sum) #1376144
+v_forage09$extract(anth09_mod_sf, fun=sum) #531800.8
+v_forage09$extract(anth09_cons_sf, fun=sum) #303856.4
+
+anth10_lib_poly <- SpatialPolygons(list(rasterToPolygons(anth10_liberal, dissolve=TRUE)@polygons[[2]]))
+anth10_lib_sf <- st_as_sf(anth10_lib_poly)
+anth10_mod_poly <- SpatialPolygons(list(rasterToPolygons(anth10_moderate, dissolve=TRUE)@polygons[[2]]))
+anth10_mod_sf <- st_as_sf(anth10_mod_poly)
+anth10_cons_poly <- SpatialPolygons(list(rasterToPolygons(anth10_conserve, dissolve=TRUE)@polygons[[2]]))
+anth10_cons_sf <- st_as_sf(anth10_cons_poly)
+
+v_all10$extract(anth10_lib_sf, fun=sum) #772030.7
+v_all10$extract(anth10_mod_sf, fun=sum) #313246.5
+v_all10$extract(anth10_cons_sf, fun=sum) #214733.9
+
+v_forage10$extract(anth10_lib_sf, fun=sum) #890550
+v_forage10$extract(anth10_mod_sf, fun=sum) #316829.3
+v_forage10$extract(anth10_cons_sf, fun=sum) #209521.3
+
+##############################################################
+
+anth09_lib_poly_out <- SpatialPolygons(list(rasterToPolygons(anth09_liberal, dissolve=TRUE)@polygons[[1]]))
+anth09_lib_sf_out <- st_as_sf(anth09_lib_poly_out)
+anth09_mod_poly_out <- SpatialPolygons(list(rasterToPolygons(anth09_moderate, dissolve=TRUE)@polygons[[1]]))
+anth09_mod_sf_out <- st_as_sf(anth09_mod_poly_out)
+anth09_cons_poly_out <- SpatialPolygons(list(rasterToPolygons(anth09_conserve, dissolve=TRUE)@polygons[[1]]))
+anth09_cons_sf_out <- st_as_sf(anth09_cons_poly_out)
+
+v_all09$extract(anth09_lib_sf_out, fun=sum) #1773574
+v_all09$extract(anth09_mod_sf_out, fun=sum) #2387085
+v_all09$extract(anth09_cons_sf_out, fun=sum) #2581974
+
+v_all09$extract(anth09_lib_sf, fun=sum)/v_all09$extract(anth09_lib_sf_out, fun=sum) #0.6242243
+v_all09$extract(anth09_mod_sf, fun=sum)/v_all09$extract(anth09_mod_sf_out, fun=sum) #0.2067784
+v_all09$extract(anth09_cons_sf, fun=sum)/v_all09$extract(anth09_cons_sf_out, fun=sum) #0.1156902
+
+v_forage09$extract(anth09_lib_sf_out, fun=sum) #2425071
+v_forage09$extract(anth09_mod_sf_out, fun=sum) #3269415
+v_forage09$extract(anth09_cons_sf_out, fun=sum) #3497359
+
+v_forage09$extract(anth09_lib_sf, fun=sum)/v_forage09$extract(anth09_lib_sf_out, fun=sum) #0.5674656
+v_forage09$extract(anth09_mod_sf, fun=sum)/v_forage09$extract(anth09_mod_sf_out, fun=sum) #0.1626593
+v_forage09$extract(anth09_cons_sf, fun=sum)/v_forage09$extract(anth09_cons_sf_out, fun=sum) #0.08688167
+
+anth10_lib_poly_out <- SpatialPolygons(list(rasterToPolygons(anth10_liberal, dissolve=TRUE)@polygons[[1]]))
+anth10_lib_sf_out <- st_as_sf(anth10_lib_poly_out)
+anth10_mod_poly_out <- SpatialPolygons(list(rasterToPolygons(anth10_moderate, dissolve=TRUE)@polygons[[1]]))
+anth10_mod_sf_out <- st_as_sf(anth10_mod_poly_out)
+anth10_cons_poly_out <- SpatialPolygons(list(rasterToPolygons(anth10_conserve, dissolve=TRUE)@polygons[[1]]))
+anth10_cons_sf_out <- st_as_sf(anth10_cons_poly_out)
+
+v_all10$extract(anth10_lib_sf_out, fun=sum) #987621.2
+v_all10$extract(anth10_mod_sf_out, fun=sum) #1446405
+v_all10$extract(anth10_cons_sf_out, fun=sum) #1544918
+
+v_all10$extract(anth10_lib_sf, fun=sum)/v_all10$extract(anth10_lib_sf_out, fun=sum) #0.7817073
+v_all10$extract(anth10_mod_sf, fun=sum)/v_all10$extract(anth10_mod_sf_out, fun=sum) #0.2165689
+v_all10$extract(anth10_cons_sf, fun=sum)/v_all10$extract(anth10_cons_sf_out, fun=sum) #0.1389937
+
+v_forage10$extract(anth10_lib_sf_out, fun=sum) #1775266
+v_forage10$extract(anth10_mod_sf_out, fun=sum) #2348987
+v_forage10$extract(anth10_cons_sf_out, fun=sum) #2456295
+
+v_forage10$extract(anth10_lib_sf, fun=sum)/v_forage10$extract(anth10_lib_sf_out, fun=sum) #0.5016432
+v_forage10$extract(anth10_mod_sf, fun=sum)/v_forage10$extract(anth10_mod_sf_out, fun=sum) #0.1348791
+v_forage10$extract(anth10_cons_sf, fun=sum)/v_forage10$extract(anth10_cons_sf_out, fun=sum) #0.08529974
+
+##########################################################
+#############3### Overlap Analysis (3 km) ################
+##########################################################
+
+anth09 <- raster("/Users/ericdougherty/Box Sync/Dissertation/Behavioral_SSF/Anthrax_GARP/Rerun_3km/B.anthracis_2009_3km.tif")
+anth10 <- raster("/Users/ericdougherty/Box Sync/Dissertation/Behavioral_SSF/Anthrax_GARP/Rerun_3km/B.anthracis_2010_3km.tif")
+
+# Create a binomial plot of the probability of anthrax presence given a relatively liberal threshold
+anth09_df <- as.data.frame(anth09)
+for (i in 1:nrow(anth09_df)) {
+  if (!is.na(anth09_df[i,1])) {
+    if (anth09_df[i,1] < 100) {
+      anth09_df[i,1] <- 0 
+    } else {
+      anth09_df[i,1] <- 1
+    }
+  }
+}
+anth09_liberal <- setValues(anth09, anth09_df[,1])
+
+# Create a similar binomial plot with a moderate estimate of the area with anthrax present
+anth09_df <- as.data.frame(anth09)
+for (i in 1:nrow(anth09_df)) {
+  if (!is.na(anth09_df[i,1])) {
+    if (anth09_df[i,1] < 500) {
+      anth09_df[i,1] <- 0 
+    } else {
+      anth09_df[i,1] <- 1
+    }
+  }
+}
+anth09_moderate <- setValues(anth09, anth09_df[,1])
+
+# Create a final binomial plot with the most conservative estimate
+anth09_df <- as.data.frame(anth09)
+for (i in 1:nrow(anth09_df)) {
+  if (!is.na(anth09_df[i,1])) {
+    if (anth09_df[i,1] < 750) {
+      anth09_df[i,1] <- 0 
+    } else {
+      anth09_df[i,1] <- 1
+    }
+  }
+}
+anth09_conserve <- setValues(anth09, anth09_df[,1])
+
+#############################
+
+# Create a binomial plot of the probability of anthrax presence given a relatively liberal threshold
+anth10_df <- as.data.frame(anth10)
+for (i in 1:nrow(anth10_df)) {
+  if (!is.na(anth10_df[i,1])) {
+    if (anth10_df[i,1] < 100) {
+      anth10_df[i,1] <- 0 
+    } else {
+      anth10_df[i,1] <- 1
+    }
+  }
+}
+anth10_liberal <- setValues(anth10, anth10_df[,1])
+
+# Create a similar binomial plot with a moderate estimate of the area with anthrax present
+anth10_df <- as.data.frame(anth10)
+for (i in 1:nrow(anth10_df)) {
+  if (!is.na(anth10_df[i,1])) {
+    if (anth10_df[i,1] < 500) {
+      anth10_df[i,1] <- 0 
+    } else {
+      anth10_df[i,1] <- 1
+    }
+  }
+}
+anth10_moderate <- setValues(anth10, anth10_df[,1])
+
+# Create a final binomial plot with the most conservative estimate
+anth10_df <- as.data.frame(anth10)
+for (i in 1:nrow(anth10_df)) {
+  if (!is.na(anth10_df[i,1])) {
+    if (anth10_df[i,1] < 750) {
+      anth10_df[i,1] <- 0 
+    } else {
+      anth10_df[i,1] <- 1
+    }
+  }
+}
+anth10_conserve <- setValues(anth10, anth10_df[,1])
+
+##############################################################
+
+v_all09 <- velox(All_2009_Risk)
+v_all10 <- velox(All_2010_Risk)
+v_forage09 <- velox(Forage_2009_Risk)
+v_forage10 <- velox(Forage_2010_Risk)
+
+anth09_lib_poly <- SpatialPolygons(list(rasterToPolygons(anth09_liberal, dissolve=TRUE)@polygons[[2]]))
+anth09_lib_sf <- st_as_sf(anth09_lib_poly)
+anth09_mod_poly <- SpatialPolygons(list(rasterToPolygons(anth09_moderate, dissolve=TRUE)@polygons[[2]]))
+anth09_mod_sf <- st_as_sf(anth09_mod_poly)
+anth09_cons_poly <- SpatialPolygons(list(rasterToPolygons(anth09_conserve, dissolve=TRUE)@polygons[[2]]))
+anth09_cons_sf <- st_as_sf(anth09_cons_poly)
+
+v_all09$extract(anth09_lib_sf, fun=sum) #771941.9
+v_all09$extract(anth09_mod_sf, fun=sum) #284857.2
+v_all09$extract(anth09_cons_sf, fun=sum) #164040.2
+
+v_forage09$extract(anth09_lib_sf, fun=sum) #923217.6
+v_forage09$extract(anth09_mod_sf, fun=sum) #306195.3
+v_forage09$extract(anth09_cons_sf, fun=sum) #163981.3
+
+anth10_lib_poly <- SpatialPolygons(list(rasterToPolygons(anth10_liberal, dissolve=TRUE)@polygons[[2]]))
+anth10_lib_sf <- st_as_sf(anth10_lib_poly)
+anth10_mod_poly <- SpatialPolygons(list(rasterToPolygons(anth10_moderate, dissolve=TRUE)@polygons[[2]]))
+anth10_mod_sf <- st_as_sf(anth10_mod_poly)
+anth10_cons_poly <- SpatialPolygons(list(rasterToPolygons(anth10_conserve, dissolve=TRUE)@polygons[[2]]))
+anth10_cons_sf <- st_as_sf(anth10_cons_poly)
+
+v_all10$extract(anth10_lib_sf, fun=sum) #731121.5
+v_all10$extract(anth10_mod_sf, fun=sum) #276615.5
+v_all10$extract(anth10_cons_sf, fun=sum) #151754.9
+
+v_forage10$extract(anth10_lib_sf, fun=sum) #874429.9
+v_forage10$extract(anth10_mod_sf, fun=sum) #299161.3
+v_forage10$extract(anth10_cons_sf, fun=sum) #299161.3
+
+##############################################################
+
+anth09_lib_poly_out <- SpatialPolygons(list(rasterToPolygons(anth09_liberal, dissolve=TRUE)@polygons[[1]]))
+anth09_lib_sf_out <- st_as_sf(anth09_lib_poly_out)
+anth09_mod_poly_out <- SpatialPolygons(list(rasterToPolygons(anth09_moderate, dissolve=TRUE)@polygons[[1]]))
+anth09_mod_sf_out <- st_as_sf(anth09_mod_poly_out)
+anth09_cons_poly_out <- SpatialPolygons(list(rasterToPolygons(anth09_conserve, dissolve=TRUE)@polygons[[1]]))
+anth09_cons_sf_out <- st_as_sf(anth09_cons_poly_out)
+
+v_all09$extract(anth09_lib_sf_out, fun=sum) #2134451
+v_all09$extract(anth09_mod_sf_out, fun=sum) #2621536
+v_all09$extract(anth09_cons_sf_out, fun=sum) #2742353
+
+v_all09$extract(anth09_lib_sf, fun=sum)/v_all09$extract(anth09_lib_sf_out, fun=sum) #0.3616583
+v_all09$extract(anth09_mod_sf, fun=sum)/v_all09$extract(anth09_mod_sf_out, fun=sum) #0.1086604
+v_all09$extract(anth09_cons_sf, fun=sum)/v_all09$extract(anth09_cons_sf_out, fun=sum) #0.05981733
+
+v_forage09$extract(anth09_lib_sf_out, fun=sum) #2956053
+v_forage09$extract(anth09_mod_sf_out, fun=sum) #3573075
+v_forage09$extract(anth09_cons_sf_out, fun=sum) #3715289
+
+v_forage09$extract(anth09_lib_sf, fun=sum)/v_forage09$extract(anth09_lib_sf_out, fun=sum) #0.3123143
+v_forage09$extract(anth09_mod_sf, fun=sum)/v_forage09$extract(anth09_mod_sf_out, fun=sum) #0.08569518
+v_forage09$extract(anth09_cons_sf, fun=sum)/v_forage09$extract(anth09_cons_sf_out, fun=sum) #0.0441369
+
+anth10_lib_poly_out <- SpatialPolygons(list(rasterToPolygons(anth10_liberal, dissolve=TRUE)@polygons[[1]]))
+anth10_lib_sf_out <- st_as_sf(anth10_lib_poly_out)
+anth10_mod_poly_out <- SpatialPolygons(list(rasterToPolygons(anth10_moderate, dissolve=TRUE)@polygons[[1]]))
+anth10_mod_sf_out <- st_as_sf(anth10_mod_poly_out)
+anth10_cons_poly_out <- SpatialPolygons(list(rasterToPolygons(anth10_conserve, dissolve=TRUE)@polygons[[1]]))
+anth10_cons_sf_out <- st_as_sf(anth10_cons_poly_out)
+
+v_all10$extract(anth10_lib_sf_out, fun=sum) #1031926
+v_all10$extract(anth10_mod_sf_out, fun=sum) #1486432
+v_all10$extract(anth10_cons_sf_out, fun=sum) #1611293
+
+v_all10$extract(anth10_lib_sf, fun=sum)/v_all10$extract(anth10_lib_sf_out, fun=sum) #0.7085015
+v_all10$extract(anth10_mod_sf, fun=sum)/v_all10$extract(anth10_mod_sf_out, fun=sum) #0.1860936
+v_all10$extract(anth10_cons_sf, fun=sum)/v_all10$extract(anth10_cons_sf_out, fun=sum) #0.09418205
+
+v_forage10$extract(anth10_lib_sf_out, fun=sum) #1802086
+v_forage10$extract(anth10_mod_sf_out, fun=sum) #2377354
+v_forage10$extract(anth10_cons_sf_out, fun=sum) #2516194
+
+v_forage10$extract(anth10_lib_sf, fun=sum)/v_forage10$extract(anth10_lib_sf_out, fun=sum) #0.4852321
+v_forage10$extract(anth10_mod_sf, fun=sum)/v_forage10$extract(anth10_mod_sf_out, fun=sum) #0.1258379
+v_forage10$extract(anth10_cons_sf, fun=sum)/v_forage10$extract(anth10_cons_sf_out, fun=sum) #0.06371596
 
